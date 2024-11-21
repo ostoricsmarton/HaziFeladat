@@ -1,0 +1,54 @@
+package KigyoJatek;
+
+import java.io.*;
+import java.util.ArrayList;
+
+public class JatekScores implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private static final String FILE_PATH = "C:\\Users\\ostor\\eclipse-workspace\\Házi feladat\\resources\\Top10.txt";
+
+    private ArrayList<PlayerScore> scores;
+
+    public JatekScores() {
+        scores = new ArrayList<>();
+    }
+
+    public void addPlayerScore(String name, int score) {
+        scores.add(new PlayerScore(name, score));
+        scores.sort((a, b) -> Integer.compare(b.getScore(), a.getScore())); // Sort descending
+        if (scores.size() > 10) {
+            scores.remove(scores.size() - 1); // Keep only top 10
+        }
+        System.out.println("Scores after adding: " + scores);
+    }
+
+    public ArrayList<PlayerScore> getScores() {
+        return scores;
+    }
+
+
+    public  JatekScores readFromFile() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
+            return (JatekScores) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error reading scores from file: " + e.getMessage());
+            return new JatekScores(); // Return a new instance if reading fails
+        }
+    }
+
+    public void writeToFile() throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+            System.out.println("Saving scores: " + scores); // Debug statement
+            out.writeObject(this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Top 10 Scores:\n");
+        for (int i = 0; i < scores.size(); i++) {
+            sb.append((i + 1)).append(". ").append(scores.get(i)).append("\n");
+        }
+        return sb.toString();
+    }
+}
