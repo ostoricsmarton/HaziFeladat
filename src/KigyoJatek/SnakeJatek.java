@@ -12,7 +12,6 @@ public class SnakeJatek extends JPanel implements ActionListener {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	private final int TILE_SIZE = 40;
     private int BOARD_WIDTH = 20;
     private int BOARD_HEIGHT = 20;
@@ -62,8 +61,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
     //private Image backgroundImage;
 
     public SnakeJatek(JFrame gameFrame, JatekScores jatekScores, String playerName) {
-    	//if(controlScheme!=ControlScheme.WASD && controlScheme!=ControlScheme.ARROW_KEYS)
-    		//chooseControlScheme();
+    	chooseControlScheme();
     	
         this.gameFrame = gameFrame;
         this.jatekScores = jatekScores;

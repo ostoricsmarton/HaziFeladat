@@ -13,7 +13,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+
 	private final int TILE_SIZE = 40;
     private int BOARD_WIDTH = 40;
     private int BOARD_HEIGHT = 24;

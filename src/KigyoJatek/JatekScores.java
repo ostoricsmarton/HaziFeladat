@@ -14,11 +14,20 @@ public class JatekScores implements Serializable {
     }
 
     public void addPlayerScore(String name, int score) {
-        scores.add(new PlayerScore(name, score));
-        scores.sort((a, b) -> Integer.compare(b.getScore(), a.getScore())); // Sort descending
-        if (scores.size() > 10) {
-            scores.remove(scores.size() - 1); // Keep only top 10
-        }
+    	scores.add(new PlayerScore(name, score));
+    	scores.sort((a, b) -> Integer.compare(b.getScore(), a.getScore())); // Sort descending
+
+    	if (scores.size() > 10) {
+    	    // Check if the lowest score (at index size - 1) is a duplicate of any other entry
+    	    PlayerScore lastScore = scores.get(scores.size() - 1);
+    	    boolean isUnique = scores.stream()
+    	                             .filter(scoreEntry -> scoreEntry.getName().equals(lastScore.getName()))
+    	                             .count() == 1;
+
+    	    if (!isUnique) {
+    	        scores.remove(scores.size() - 1); // Remove the last score if it's a duplicate
+    	    }
+    	}
         System.out.println("Scores after adding: " + scores);
     }
 
