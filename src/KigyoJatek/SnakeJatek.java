@@ -56,6 +56,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
     }
 
     private ControlScheme controlScheme;
+    private boolean inputProcessed = false;
 
     //private Image backgroundImage;
 
@@ -67,7 +68,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
         this.jatekScores = jatekScores;
         this.playername = playerName;
         setPreferredSize(new Dimension(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE));
-        setBackground(Color.BLACK);
+        setBackground(Color.GREEN);
         snakeHeadImageD = new ImageIcon("./resources/KigyoFejD.png").getImage();
         snakeHeadImageU = new ImageIcon("./resources/KigyoFejU.png").getImage();
         snakeHeadImageR = new ImageIcon("./resources/KigyoFejR.png").getImage();
@@ -106,6 +107,9 @@ public class SnakeJatek extends JPanel implements ActionListener {
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent e) {
                 int key = e.getKeyCode();
+                if (inputProcessed) {
+                    return;
+                }
 
                 // Handle controls based on the chosen scheme
                 if (controlScheme == ControlScheme.WASD) {
@@ -141,6 +145,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
                             break;
                     }
                 }
+                inputProcessed = true;
             }
         });
     }
@@ -260,6 +265,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (running) {
+        	inputProcessed = false;
             moveSnake();
             checkCollision();
             checkFood();

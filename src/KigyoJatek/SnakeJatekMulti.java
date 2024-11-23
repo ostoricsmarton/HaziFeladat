@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class SnakeJatekMulti extends JPanel implements ActionListener {
     
@@ -75,6 +76,13 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
     
     private ArrayList<Character> SnakeDirections1;
     private ArrayList<Character> SnakeDirections2;
+    private boolean inputProcessed1 = false;
+    private boolean inputProcessed2 = false;
+
+
+    private LinkedBlockingQueue<Character> player1InputQueue = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<Character> player2InputQueue = new LinkedBlockingQueue<>();
+
     
 
     //private Image backgroundImage;
@@ -83,7 +91,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
     	this.gameFrame = gameFrame;
     	
         setPreferredSize(new Dimension(BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE));
-        setBackground(Color.BLACK);
+        setBackground(Color.YELLOW);
         snakeHeadImageD = new ImageIcon("./resources/KigyoFejD.png").getImage();
         snakeHeadImageU = new ImageIcon("./resources/KigyoFejU.png").getImage();
         snakeHeadImageR = new ImageIcon("./resources/KigyoFejR.png").getImage();
@@ -147,38 +155,66 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
 
         setFocusable(true);
         addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
             public void keyPressed(java.awt.event.KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case java.awt.event.KeyEvent.VK_LEFT:
-                        if (direction1 != 'R') direction1 = 'L';
-                        break;
-                    case java.awt.event.KeyEvent.VK_RIGHT:
-                        if (direction1 != 'L') direction1 = 'R';
-                        break;
-                    case java.awt.event.KeyEvent.VK_UP:
-                        if (direction1 != 'D') direction1 = 'U';
-                        break;
-                    case java.awt.event.KeyEvent.VK_DOWN:
-                        if (direction1 != 'U') direction1 = 'D';
-                        break;
+                // Handle player 1 inputs
+                if (!inputProcessed1) {
+                    switch (e.getKeyCode()) {
+                        case java.awt.event.KeyEvent.VK_LEFT -> {
+                            if (direction1 != 'R') {
+                                player1InputQueue.offer('L');
+                                inputProcessed1 = true; // Lock input for this tick
+                            }
+                        }
+                        case java.awt.event.KeyEvent.VK_RIGHT -> {
+                            if (direction1 != 'L') {
+                                player1InputQueue.offer('R');
+                                inputProcessed1 = true; // Lock input for this tick
+                            }
+                        }
+                        case java.awt.event.KeyEvent.VK_UP -> {
+                            if (direction1 != 'D') {
+                                player1InputQueue.offer('U');
+                                inputProcessed1 = true; // Lock input for this tick
+                            }
+                        }
+                        case java.awt.event.KeyEvent.VK_DOWN -> {
+                            if (direction1 != 'U') {
+                                player1InputQueue.offer('D');
+                                inputProcessed1 = true; // Lock input for this tick
+                            }
+                        }
+                    }
                 }
-            }
-        });
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case java.awt.event.KeyEvent.VK_A:
-                        if (direction2 != 'R') direction2 = 'L';
-                        break;
-                    case java.awt.event.KeyEvent.VK_D:
-                        if (direction2 != 'L') direction2 = 'R';
-                        break;
-                    case java.awt.event.KeyEvent.VK_W:
-                        if (direction2 != 'D') direction2 = 'U';
-                        break;
-                    case java.awt.event.KeyEvent.VK_S:
-                        if (direction2 != 'U') direction2 = 'D';
-                        break;
+
+                // Handle player 2 inputs
+                if (!inputProcessed2) {
+                    switch (e.getKeyCode()) {
+                        case java.awt.event.KeyEvent.VK_A -> {
+                            if (direction2 != 'R') {
+                                player2InputQueue.offer('L');
+                                inputProcessed2 = true; // Lock input for this tick
+                            }
+                        }
+                        case java.awt.event.KeyEvent.VK_D -> {
+                            if (direction2 != 'L') {
+                                player2InputQueue.offer('R');
+                                inputProcessed2 = true; // Lock input for this tick
+                            }
+                        }
+                        case java.awt.event.KeyEvent.VK_W -> {
+                            if (direction2 != 'D') {
+                                player2InputQueue.offer('U');
+                                inputProcessed2 = true; // Lock input for this tick
+                            }
+                        }
+                        case java.awt.event.KeyEvent.VK_S -> {
+                            if (direction2 != 'U') {
+                                player2InputQueue.offer('D');
+                                inputProcessed2 = true; // Lock input for this tick
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -395,6 +431,18 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (running) {
+            inputProcessed1 = false;
+            inputProcessed2 = false;
+        	Character input1 = player1InputQueue.poll();
+            if (input1 != null) {
+                direction1 = input1;
+            }
+
+            // Process player 2 inputs
+            Character input2 = player2InputQueue.poll();
+            if (input2 != null) {
+                direction2 = input2;
+            }
             moveSnake1();
             moveSnake2();
             checkCollision();
@@ -452,7 +500,6 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         for (int i = 1; i < snake1.size(); i++) {
             if (head1.equals(snake1.get(i))) {
                 running = false;
-                //JOptionPane.showMessageDialog(this, "Kettes játékos győzőtt! ", "Ok", JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
 
@@ -460,7 +507,6 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         for (int i = 0; i < snake2.size(); i++) {
         	if (head1.equals(snake2.get(i))) {
                 running = false;
-                //JOptionPane.showMessageDialog(this, "Kettes játékos győzőtt! ", "Ok", JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
 
@@ -474,7 +520,6 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         for (int i = 1; i < snake2.size(); i++) {
             if (head2.equals(snake2.get(i))) {
                 running = false;
-                //JOptionPane.showMessageDialog(this, "Egyes játékos győzőtt! ", "Ok", JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
 
@@ -483,7 +528,6 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         for (int i = 0; i < snake1.size(); i++) {
             if (head2.equals(snake1.get(i))) {
                 running = false;
-                //JOptionPane.showMessageDialog(this, "Egyes játékos győzőtt! ", "Ok", JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
             

@@ -9,12 +9,15 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainMenu extends JFrame {
     
     /**
 	 * 
 	 */
+	private static final Logger LOGGER = Logger.getLogger(MainMenu.class.getName());
 	private static final long serialVersionUID = 1L;
 	private JatekScores jatekScores = new JatekScores(); // JatekScores példány
 
@@ -53,7 +56,13 @@ public class MainMenu extends JFrame {
                 try {
 					jatekScores.writeToFile();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+					LOGGER.log(Level.SEVERE, "Failed to save scores before closing the application", e1);
+                    JOptionPane.showMessageDialog(
+                        panel,
+                        "An error occurred while saving scores. Progress may not be saved.",
+                        "Save Error",
+                        JOptionPane.ERROR_MESSAGE);
+					e1.printStackTrace();
 					e1.printStackTrace();
 				} // Save scores before exiting
                 System.exit(0);
@@ -66,7 +75,12 @@ public class MainMenu extends JFrame {
                 try {
 					jatekScores.writeToFile();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+					LOGGER.log(Level.SEVERE, "Failed to save scores before closing the application", e1);
+                    JOptionPane.showMessageDialog(
+                        panel,
+                        "An error occurred while saving scores. Progress may not be saved.",
+                        "Save Error",
+                        JOptionPane.ERROR_MESSAGE);
 					e1.printStackTrace();
 				} // Save scores before exiting
             }
@@ -166,18 +180,19 @@ public class MainMenu extends JFrame {
         JOptionPane.showMessageDialog(this, scoresText.toString(), "Scoreboard", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            MainMenu mainMenu;
-			try {
-				mainMenu = new MainMenu();
-				mainMenu.setVisible(true);
-			} catch (ClassNotFoundException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            
+            try {
+                MainMenu mainMenu = new MainMenu();
+                mainMenu.setVisible(true);
+            } catch (ClassNotFoundException | IOException e) {
+                LOGGER.log(Level.SEVERE, "Failed to initialize the Main Menu", e);
+                showErrorDialog("An error occurred while launching the application.");
+            }
         });
-        
+    }
+
+    private static void showErrorDialog(String message) {
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
