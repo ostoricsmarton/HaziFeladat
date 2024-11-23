@@ -14,8 +14,8 @@ public class SnakeJatek extends JPanel implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final int TILE_SIZE = 40;
-    private final int BOARD_WIDTH = 20;
-    private final int BOARD_HEIGHT = 20;
+    private int BOARD_WIDTH = 20;
+    private int BOARD_HEIGHT = 20;
     
     private Timer timer;
     private ArrayList<Point> snake;
@@ -57,12 +57,13 @@ public class SnakeJatek extends JPanel implements ActionListener {
 
     private ControlScheme controlScheme;
     private boolean inputProcessed = false;
+	private int BOARD_WIDHT;
 
     //private Image backgroundImage;
 
     public SnakeJatek(JFrame gameFrame, JatekScores jatekScores, String playerName) {
-    	
-    	chooseControlScheme();
+    	//if(controlScheme!=ControlScheme.WASD && controlScheme!=ControlScheme.ARROW_KEYS)
+    		//chooseControlScheme();
     	
         this.gameFrame = gameFrame;
         this.jatekScores = jatekScores;
@@ -293,7 +294,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
         }
     }
 
-    private void moveSnake() {
+    public void moveSnake() {
         Point head = snake.get(0);
         Point newHead = new Point(head);
 
@@ -310,7 +311,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
         
     }
 
-    private void checkCollision() {
+    public void checkCollision() {
         Point head = snake.get(0);
 
         if (head.x < 0 || head.x >= BOARD_WIDTH || head.y < 0 || head.y >= BOARD_HEIGHT) {
@@ -325,7 +326,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
         }
     }
 
-    private void checkFood() {
+    public void checkFood() {
         Point head = snake.get(0);
         if (head.equals(food)) {
             score += 10; // Pontszám növelése gyümölcs elfogyasztásakor
@@ -334,7 +335,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
         }
     }
 
-    private void placeFood() {
+    public void placeFood() {
         Random rand = new Random();
         boolean validPosition = false;
 
@@ -365,4 +366,41 @@ public class SnakeJatek extends JPanel implements ActionListener {
         jatekScores.addPlayerScore(playername,score);
         gameFrame.dispose();
     }
+    public void setSnake(ArrayList<Point> s) {
+    	this.snake = s;
+    }
+    public ArrayList<Point> getSnake() {
+    	return this.snake;
+    }
+    public void setDirection(char d) {
+    	this.direction = d;
+    }
+
+    public void setFood(Point f) {
+    	this.food = f;
+    }
+    public Point getFood() {
+    	return this.food;
+    }
+    public int getScore() {
+    	return this.score;
+    }
+
+	public int getBoardWidth() {
+		return this.BOARD_WIDTH;
+	}
+
+	public int getBoardHeight() {
+		return this.BOARD_HEIGHT;
+	}
+
+	public void setBoardDimensions(int i, int j) {
+		this.BOARD_HEIGHT=i;
+		this.BOARD_WIDHT=j;
+		
+	}
+
+	public Boolean isRunning() {
+		return running;
+	}
 }

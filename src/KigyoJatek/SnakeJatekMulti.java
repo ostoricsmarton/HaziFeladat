@@ -15,8 +15,8 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final int TILE_SIZE = 40;
-    private final int BOARD_WIDTH = 40;
-    private final int BOARD_HEIGHT = 24;
+    private int BOARD_WIDTH = 40;
+    private int BOARD_HEIGHT = 24;
     
     private Timer timer;
     private ArrayList<Point> snake1;
@@ -454,7 +454,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
     }
     
 
-    private void moveSnake1() {
+    public void moveSnake1() {
         Point head = snake1.get(0);
         Point newHead = new Point(head);
 
@@ -471,7 +471,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         
     }
     
-    private void moveSnake2() {
+    public void moveSnake2() {
         Point head = snake2.get(0);
         Point newHead = new Point(head);
 
@@ -489,7 +489,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
     }
 
 
-    private void checkCollision() {
+    public void checkCollision() {
         Point head1 = snake1.get(0);
         Point head2 = snake2.get(0);
 
@@ -535,7 +535,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         
     }
 
-    private void checkFood() {
+    public void checkFood() {
         Point head1 = snake1.get(0);
         Point head2 = snake2.get(0);
         if (head1.equals(food1)) {
@@ -556,7 +556,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         }
     }
 
-    private void placeFood1() {
+    public void placeFood1() {
         Random rand1 = new Random();
         boolean validPosition1 = false;
         
@@ -580,7 +580,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         }
     }
     
-    private void placeFood2() {
+    public void placeFood2() {
         Random rand2 = new Random();
         boolean validPosition2 = false;
         
@@ -610,4 +610,51 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         
         gameFrame.dispose();
     }
+    
+    public void setSnake1(ArrayList<Point> s) {
+    	this.snake1 = s;
+    }
+    
+    public ArrayList<Point> getSnake1() {
+    	return this.snake1;
+    }
+    
+    public void setDirection1(char d) {
+    	this.direction1 = d;
+    }
+    
+    public void setSnake2(ArrayList<Point> s) {
+    	this.snake2 = s;
+    }
+    public ArrayList<Point> getSnake2() {
+    	return this.snake2;
+    }
+    
+    public void setDirection2(char d) {
+    	this.direction2 = d;
+    }
+
+    public void setFood1(Point f) {
+    	this.food1 = f;
+    }
+    
+    public Point getFood1() {
+    	return this.food1;
+    }
+    
+    public void setFood2(Point f) {
+    	this.food2 = f;
+    }
+    
+    public Point getFood2() {
+    	return this.food2;
+    }
+
+
+	public Boolean isRunning() {
+		return running;
+	}
+	public void setRunning(Boolean b) {
+		this.running = b;
+	}
 }
