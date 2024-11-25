@@ -78,6 +78,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
     private ArrayList<Character> SnakeDirections2;
     private boolean inputProcessed1 = false;
     private boolean inputProcessed2 = false;
+    private boolean playerOneWon = false;
 
 
     private LinkedBlockingQueue<Character> player1InputQueue = new LinkedBlockingQueue<>();
@@ -515,11 +516,13 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
 
         if (head2.x < 0 || head2.x >= BOARD_WIDTH || head2.y < 0 || head2.y >= BOARD_HEIGHT) {
             running = false;
+            playerOneWon = true;
         }
 
         for (int i = 1; i < snake2.size(); i++) {
             if (head2.equals(snake2.get(i))) {
                 running = false;
+                playerOneWon = true;
                 break;
             }
 
@@ -528,6 +531,7 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
         for (int i = 0; i < snake1.size(); i++) {
             if (head2.equals(snake1.get(i))) {
                 running = false;
+                playerOneWon = true;
                 break;
             }
             
@@ -606,7 +610,12 @@ public class SnakeJatekMulti extends JPanel implements ActionListener {
 
     private void endGame() {
         timer.stop();
-        JOptionPane.showMessageDialog(this, "Játék vége! ", "Kilépés", JOptionPane.INFORMATION_MESSAGE);
+        if(playerOneWon) {
+        JOptionPane.showMessageDialog(this, "Játék vége! \n Egyes játékos győzött. ", "Kilépés", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else {
+        	JOptionPane.showMessageDialog(this, "Játék vége! \n Kettes játékos győzött. ", "Kilépés", JOptionPane.INFORMATION_MESSAGE);
+        }
         
         gameFrame.dispose();
     }
