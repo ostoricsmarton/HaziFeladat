@@ -56,7 +56,6 @@ public class SnakeJatek extends JPanel implements ActionListener {
 
     private ControlScheme controlScheme;
     private boolean inputProcessed = false;
-	private int BOARD_WIDHT;
 
     //private Image backgroundImage;
 
@@ -394,7 +393,7 @@ public class SnakeJatek extends JPanel implements ActionListener {
 
 	public void setBoardDimensions(int i, int j) {
 		this.BOARD_HEIGHT=i;
-		this.BOARD_WIDHT=j;
+		this.BOARD_WIDTH=j;
 		
 	}
 

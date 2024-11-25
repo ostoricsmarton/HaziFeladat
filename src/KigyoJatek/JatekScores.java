@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class JatekScores implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final String FILE_PATH = "C:\\Users\\ostor\\eclipse-workspace\\Házi feladat\\resources\\Top10.txt";
+    private static final String FILE_PATH = ".\\resources\\Top10.txt";
 
     private ArrayList<PlayerScore> scores;
 
