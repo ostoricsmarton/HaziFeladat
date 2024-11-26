@@ -274,10 +274,10 @@ public class SnakeJatek extends JPanel implements ActionListener {
     }
     
     private void chooseControlScheme() {
-        Object[] options = {"WASD", "Arrow Keys"};
+        Object[] options = {"WASD", "Nyilak"};
         int choice = JOptionPane.showOptionDialog(this,
-                "Choose your control scheme:",
-                "Control Scheme Selection",
+                "Válassz irányítást:",
+                "Irányítás választása",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
